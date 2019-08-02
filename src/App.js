@@ -1,25 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Container } from "@material-ui/core";
+import Form from "./components/Form";
+import TasksList from "./components/TasksList";
+
+const useStyles = makeStyles(themes => ({
+  container: {
+    position: "absolute",
+    display: "flex",
+    flexFlow: "row no-wrap"
+  }
+}));
 
 function App() {
+  const classes = useStyles();
+  const [tasks, setTasks] = useState([]);
+  const addTask = newTask => {
+    setTasks([newTask, ...tasks]);
+  };
+  const deleteTask = taskToDelete => {
+    setTasks(tasks.filter((task, index) => index !== taskToDelete));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Container>
+        <h1>ToDo List</h1>
+      </Container>
+      <Container className={classes.container}>
+        <Form onSubmit={addTask} className={classes.form} />
+        <TasksList tasks={tasks} deleteTask={deleteTask} />
+      </Container>
+    </>
   );
 }
 
